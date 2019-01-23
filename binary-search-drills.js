@@ -39,25 +39,33 @@ class BinaryTree {
       const parent = this.parent;
       if (!this.left && !this.right) {
         // remove if no children
-        if (parent.left.key === key) parent.left = null;
+        if (parent.left && parent.left.key === key) parent.left = null;
         else parent.right = null;
       } else if (this.left && this.right) {
         // remove if two children
         const largest = this.left._findLargest();
         if (largest.parent.left === largest) largest.parent.left = null;
         else largest.parent.right = null;
+        if (parent.left && parent.left.key === key) parent.left = largest;
+        else parent.right = largest;
         largest.parent = parent;
         largest.right = this.right;
         largest.left = this.left;
+        this.right.parent = largest;
       } else {
         // remove if one child
         if (this.left) {
+          if (parent.left && parent.left.key === key) parent.left = this.left;
+          else parent.right = this.left;
           this.left.parent = parent;
           this.left = null;
         } else {
+          if (parent.left && parent.left.key === key) parent.left = this.right;
+          else parent.right = this.right;
           this.right.parent = parent;
           this.right = null;
         }
+
       }
     } else if (this.key > key) {
       if (this.left === null) {
@@ -87,6 +95,8 @@ function main() {
   tree.insert(3, 'first');
   tree.insert(6, 'first');
   tree.insert(4, 'first');
+  tree.insert(0, 'first');
+  tree.remove(1);
 
   console.log(tree);
 }
