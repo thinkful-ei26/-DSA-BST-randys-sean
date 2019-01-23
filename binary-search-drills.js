@@ -30,8 +30,12 @@ class BinaryTree {
     }
   }
 
-  _findLargest() {
-    if (this.right) return this.right._findLargest();
+  findLargest() {
+    if (this.right) return this.right.findLargest();
+    else return this;
+  }
+  findSmallest() {
+    if (this.left) return this.left.findSmallest();
     else return this;
   }
   remove(key) {
@@ -43,7 +47,7 @@ class BinaryTree {
         else parent.right = null;
       } else if (this.left && this.right) {
         // remove if two children
-        const largest = this.left._findLargest();
+        const largest = this.left.findLargest();
         if (largest.parent.left === largest) largest.parent.left = null;
         else largest.parent.right = null;
         if (parent.left && parent.left.key === key) parent.left = largest;
@@ -121,24 +125,46 @@ function height(tree) {
   return Math.max(rightChildTree, leftChildTree) + 1;
 }
 
+// function traverseTree(tree) {
+//   if (!tree.left && !tree.right) return [tree.value];
+
+//   else {
+//     let leftArr = [];
+//     if (tree.left) leftArr = traverseTree(tree.left);
+//     console.log('left: ', leftArr);
+//     let rightArr = [];
+//     if (tree.right) rightArr = traverseTree(tree.right);
+//     console.log('right: ', rightArr);
+//     return leftArr.concat(tree.value).concat(rightArr);
+//   }
+// }
+function isBST(tree) {
+  // check max of left is less than current and min of right is greater than current
+  // recursively call isBST on tree.left and tree.right to make sure it continues all the way through
+  if (!tree.left && !tree.right) return true;
+  if ((tree.left && tree.left.findLargest.value > tree.value) || (tree.right && tree.right.findSmallest.value < tree.value)){
+    return false;
+  }
+  let isLeftBST = true;
+  if (tree.left) isLeftBST = isBST(tree.left);
+  let isRightBST = true;
+  if (tree.right) isRightBST = isBST(tree.right);
+  return (isLeftBST && isRightBST);
+}
+
 function main() {
-  const tree = new BinaryTree();
-  tree.insert(5, 'first');
-  tree.insert(3, 'third');
-  tree.insert(7, 'first');
-  tree.insert(4, 'first');
-<<<<<<< HEAD
-  tree.insert(0, 'first');
-  tree.remove(1);
-=======
-  tree.insert(6, 'first');
-  tree.insert(1, 'first');
+  const tree = new BinaryTree(2, '2');
+  tree.insert(5, '5');
+  tree.insert(3, '3');
+  tree.insert(7, '7');
+  tree.insert(4, '4');
+  tree.insert(0, '0');
+  tree.insert(6, '6');
+  tree.insert(1, '1');
 
 
-  console.log(height(tree));
+  console.log(isBST(tree));
   // console.log(tree.find(6));
->>>>>>> 603ccac0a1902a73a64caf824793f990af228341
-
 }
 
 main();
