@@ -76,19 +76,36 @@ class BinaryTree {
     }
   }
 
-  
+  find(key) {
+    if (this.key === key) {
+      return this;
+    }
 
-
+    if (this.key > key) {
+      if (!this.left) {
+        throw new Error('Key Error');
+      } else {
+        return this.left.find(key);
+      }
+    } else {
+      if (!this.right) {
+        throw new Error('Key Error');
+      } else {
+        return this.right.find(key);
+      }
+    }
+  }
 }
 
 function main() {
   const tree = new BinaryTree();
   tree.insert(1, 'first');
-  tree.insert(3, 'first');
+  tree.insert(3, 'third');
   tree.insert(6, 'first');
   tree.insert(4, 'first');
 
-  console.log(tree);
+  // console.log(tree.find(6));
+
 }
 
 main();
