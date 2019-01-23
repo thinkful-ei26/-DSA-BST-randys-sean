@@ -107,6 +107,20 @@ class BinaryTree {
       }
     }
   }
+
+  inOrderTraversal() {
+    if (!this.left && !this.right) return [this.value];
+
+    else {
+      let leftArr = [];
+      if (this.left) leftArr = this.left.traverseTree();
+      // console.log('left: ', leftArr);
+      let rightArr = [];
+      if (this.right) rightArr = this.right.traverseTree();
+      // console.log('right: ', rightArr);
+      return leftArr.concat(this.value).concat(rightArr);
+    }
+  }
 }
 
 function height(tree) {
@@ -125,19 +139,19 @@ function height(tree) {
   return Math.max(rightChildTree, leftChildTree) + 1;
 }
 
-// function traverseTree(tree) {
-//   if (!tree.left && !tree.right) return [tree.value];
+function traverseTree(tree) {
+  if (!tree.left && !tree.right) return [tree.value];
 
-//   else {
-//     let leftArr = [];
-//     if (tree.left) leftArr = traverseTree(tree.left);
-//     console.log('left: ', leftArr);
-//     let rightArr = [];
-//     if (tree.right) rightArr = traverseTree(tree.right);
-//     console.log('right: ', rightArr);
-//     return leftArr.concat(tree.value).concat(rightArr);
-//   }
-// }
+  else {
+    let leftArr = [];
+    if (tree.left) leftArr = traverseTree(tree.left);
+    // console.log('left: ', leftArr);
+    let rightArr = [];
+    if (tree.right) rightArr = traverseTree(tree.right);
+    // console.log('right: ', rightArr);
+    return leftArr.concat(tree.value).concat(rightArr);
+  }
+}
 function isBST(tree) {
   // check max of left is less than current and min of right is greater than current
   // recursively call isBST on tree.left and tree.right to make sure it continues all the way through
@@ -151,6 +165,39 @@ function isBST(tree) {
   if (tree.right) isRightBST = isBST(tree.right);
   return (isLeftBST && isRightBST);
 }
+function traversalForThirdLargest(tree) {
+  if (!tree.left && !tree.right) return [tree.value];
+
+  else {
+    let leftArr = [];
+    if (tree.left && (!tree.right || !tree.right.right)) leftArr = traversalForThirdLargest(tree.left);
+    // console.log('left: ', leftArr);
+    let rightArr = [];
+    if (tree.right) rightArr = traversalForThirdLargest(tree.right);
+    // console.log('right: ', rightArr);
+    return leftArr.concat(tree.value).concat(rightArr);
+  }
+}
+function thirdLargest(tree) {
+  const arr = traversalForThirdLargest(tree);
+  return arr[arr.length - 3];
+}
+function isBalanced(tree) {
+  if (!tree.left && !tree.right) return true;
+  let heightL = 0;
+  let balL = true;
+  if (tree.left) {
+    heightL = height(tree.left);
+    balL = isBalanced(tree.left);
+  }
+  let heightR = 0;
+  let balR = true;
+  if (tree.right) {
+    heightR = height(tree.right);
+    balR = isBalanced(tree.right);
+  }
+  return ((Math.abs(heightL-heightR) <= 1) && balL && balR);
+}
 
 function main() {
   const tree = new BinaryTree(2, '2');
@@ -161,9 +208,10 @@ function main() {
   tree.insert(0, '0');
   tree.insert(6, '6');
   tree.insert(1, '1');
+  // tree.insert(4.5, '4.5');
 
 
-  console.log(isBST(tree));
+  console.log(isBalanced(tree));
   // console.log(tree.find(6));
 }
 
