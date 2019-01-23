@@ -84,21 +84,61 @@ class BinaryTree {
     }
   }
 
+  find(key) {
+    if (this.key === key) {
+      return this;
+    }
+
+    if (this.key > key) {
+      if (!this.left) {
+        throw new Error('Key Error');
+      } else {
+        return this.left.find(key);
+      }
+    } else {
+      if (!this.right) {
+        throw new Error('Key Error');
+      } else {
+        return this.right.find(key);
+      }
+    }
+  }
+}
+
+function height(tree) {
+  //traversing down each child
+  //saving the height of each child 
+  //use a max function to find the largest of each childs height
+  //if height is only one, return 1
+  if (!tree.left && !tree.right) return 0;
+
+  let leftChildTree = 0;
+  if (tree.left) leftChildTree = height(tree.left);
+
+  let rightChildTree = 0;
+  if (tree.right) rightChildTree = height(tree.right);
   
-
-
+  return Math.max(rightChildTree, leftChildTree) + 1;
 }
 
 function main() {
   const tree = new BinaryTree();
-  tree.insert(1, 'first');
-  tree.insert(3, 'first');
-  tree.insert(6, 'first');
+  tree.insert(5, 'first');
+  tree.insert(3, 'third');
+  tree.insert(7, 'first');
   tree.insert(4, 'first');
+<<<<<<< HEAD
   tree.insert(0, 'first');
   tree.remove(1);
+=======
+  tree.insert(6, 'first');
+  tree.insert(1, 'first');
 
-  console.log(tree);
+
+  console.log(height(tree));
+  // console.log(tree.find(6));
+>>>>>>> 603ccac0a1902a73a64caf824793f990af228341
+
 }
 
 main();
